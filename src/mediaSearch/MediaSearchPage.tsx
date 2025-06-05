@@ -7,9 +7,24 @@ import { MediaType, Multimedia } from "../types/Multimedia";
 export default function MediaSearchPage() {
   const [query, setQuery] = useState("");
   const [multimediaList, setMultimediaList] = useState<Multimedia[]>();
+  const [error, setError] = useState("");
+
+  const validate = (value: string): boolean => {
+    if (!value.trim()) {
+      setError("Search query is required.");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
 
   const onSearch = async () => {
-    setMultimediaList(await getMultimedia(query, MediaType.ALL));
+    if (validate(query)) {
+      setMultimediaList(await getMultimedia(query, MediaType.ALL));
+    } else {
+      setMultimediaList([]);
+    }
   };
 
   return (
@@ -35,6 +50,7 @@ export default function MediaSearchPage() {
           onChange={setQuery}
           placeholder="Search..."
           onEnter={onSearch}
+          error={error}
         ></SearchBar>
         {/* TODO: Implement filter dropdown */}
         <Button onClick={() => {}}>Filter</Button>

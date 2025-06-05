@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   onEnter?: () => void;
+  error?: string;
 };
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -12,6 +13,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onChange,
   placeholder = "Search...",
   onEnter = () => {},
+  error,
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -35,6 +37,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         }}
         onKeyDown={handleKeyDown}
       />
+      {error && <div style={{ color: "red", fontSize: "0.9rem" }}>{error}</div>}
     </div>
   );
 };
