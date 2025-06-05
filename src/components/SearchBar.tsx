@@ -4,13 +4,21 @@ type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  onEnter?: () => void;
 };
 
 const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
   placeholder = "Search...",
+  onEnter = () => {},
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onEnter();
+    }
+  };
+
   return (
     <div>
       <input
@@ -25,6 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           border: "1px solid #ccc",
           fontSize: "1rem",
         }}
+        onKeyDown={handleKeyDown}
       />
     </div>
   );
