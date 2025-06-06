@@ -1,9 +1,9 @@
 export interface Multimedia {
-  wrapperType: string;
-  kind: MediaType;
+  trackId: number;
   trackName: string;
   artistName: string;
-  collectionName: string;
+  artworkUrl100?: string;
+  trackPrice?: number;
 }
 
 export enum MediaType {

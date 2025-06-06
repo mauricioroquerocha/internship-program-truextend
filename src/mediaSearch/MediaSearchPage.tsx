@@ -1,13 +1,15 @@
 import { useState } from "react";
-import SearchBar from "../components/SearchBar";
-import Button from "../components/Button";
+import SearchBar from "../components/searchBar/SearchBar";
+import Button from "../components/button/Button";
 import { getMultimedia } from "../lib/MultimediaApi";
 import { MediaType, Multimedia } from "../types/Multimedia";
+import MultimediaList from "./multimediaList/MultimediaList";
 
 export default function MediaSearchPage() {
   const [query, setQuery] = useState("");
   const [multimediaList, setMultimediaList] = useState<Multimedia[]>();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const validate = (value: string): boolean => {
     if (!value.trim()) {
@@ -21,7 +23,9 @@ export default function MediaSearchPage() {
 
   const onSearch = async () => {
     if (validate(query)) {
+      setLoading(true);
       setMultimediaList(await getMultimedia(query, MediaType.ALL));
+      setLoading(false);
     } else {
       setMultimediaList([]);
     }
@@ -34,6 +38,7 @@ export default function MediaSearchPage() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        gap: "2rem",
       }}
     >
       <div
@@ -56,10 +61,10 @@ export default function MediaSearchPage() {
         <Button onClick={() => {}}>Filter</Button>
         <Button onClick={onSearch}>Search</Button>
       </div>
-      {/* TODO: Implement list search */}
-      {multimediaList?.map((multimedia) => {
-        return <h6>{multimedia.artistName}</h6>;
-      })}
+      <MultimediaList
+        multimediaList={multimediaList}
+        loading={loading}
+      ></MultimediaList>
     </div>
   );
 }
