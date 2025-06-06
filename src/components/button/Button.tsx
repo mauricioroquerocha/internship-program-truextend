@@ -17,13 +17,6 @@ const Button: React.FC<ButtonProps> = ({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      style={{
-        padding: "0.5rem",
-        backgroundColor: "black",
-        color: "white",
-        borderRadius: "0.5rem",
-        border: "1px solid #ccc",
-      }}
       className={styles.button}
     >
       {children}

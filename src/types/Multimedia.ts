@@ -4,6 +4,7 @@ export interface Multimedia {
   artistName: string;
   artworkUrl100?: string;
   trackPrice?: number;
+  collectionName: string;
 }
 
 export enum MediaType {
