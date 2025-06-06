@@ -1,3 +1,6 @@
+import { toast } from "react-toastify";
+import { ERROR_MESSAGES } from "../types/ErrorMessages";
+
 const baseUrl = process.env.REACT_APP_BACKEND_API_BASE_URL;
 const defaultHeaders: Record<string, string> = {
   "Content-Type": "application/json",
@@ -8,7 +11,7 @@ export const Api = {
     endpoint: string,
     urlSearchParams: string = "",
     headers?: Record<string, string>
-  ): Promise<T> => {
+  ): Promise<T | null> => {
     try {
       const res = await fetch(`${baseUrl}${endpoint}${urlSearchParams}`, {
         method: "GET",
@@ -16,12 +19,16 @@ export const Api = {
       });
 
       if (!res.ok) {
-        console.log(`GET ${endpoint} failed`);
+        toast(ERROR_MESSAGES.SEARCH);
+
+        return null;
       }
 
       return res.json();
     } catch (error) {
-      throw new Error("Can not make GET request" + error);
+      toast(ERROR_MESSAGES.GENERIC);
+
+      return null;
     }
   },
 };

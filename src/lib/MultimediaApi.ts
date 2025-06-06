@@ -9,6 +9,8 @@ const getMultimedia = async (query: string, mediaType: MediaType | string) => {
     `?term=${encodedQuery}&media=${mediaType}`
   );
 
+  if (!data) return;
+
   return data.results;
 };
 
