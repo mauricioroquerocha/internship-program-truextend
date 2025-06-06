@@ -2,7 +2,7 @@ import "./SkeletonCard.css"; // or use CSS modules if preferred
 
 export default function SkeletonCard() {
   return (
-    <div className="skeleton-card">
+    <div data-testid="skeleton-card" className="skeleton-card">
       <div className="skeleton-image" />
       <div
         style={{

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SearchBar from "../components/SearchBar";
-import Button from "../components/Button";
+import SearchBar from "../components/searchBar/SearchBar";
+import Button from "../components/button/Button";
 import { getMultimedia } from "../lib/MultimediaApi";
 import { MediaType, Multimedia } from "../types/Multimedia";
 import MultimediaList from "./multimediaList/MultimediaList";

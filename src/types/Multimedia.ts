@@ -1,10 +1,7 @@
 export interface Multimedia {
   trackId: number;
-  wrapperType: string;
-  kind: MediaType;
   trackName: string;
   artistName: string;
-  collectionName: string;
   artworkUrl100?: string;
   trackPrice?: number;
 }

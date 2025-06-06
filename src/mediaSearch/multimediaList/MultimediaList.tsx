@@ -1,6 +1,6 @@
 import React from "react";
 import { Multimedia } from "../../types/Multimedia";
-import Card from "../../components/Card";
+import Card from "../../components/card/Card";
 import styles from "./MultimediaList.module.css";
 import SkeletonCard from "../../components/skeletonCard/SkeletonCard";
 
