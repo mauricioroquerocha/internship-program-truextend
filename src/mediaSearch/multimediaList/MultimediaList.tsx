@@ -22,7 +22,11 @@ const MultimediaList: React.FC<MultimediaListProps> = ({
           <Card
             key={multimedia.trackId}
             imageUrl={multimedia.artworkUrl100 ?? defaultImgUrl}
-            name={multimedia.trackName ?? "Unknown Title"}
+            name={
+              multimedia.trackName ??
+              multimedia.collectionName ??
+              "Unknown Title"
+            }
             artistName={multimedia.artistName ?? "Unknown Artist"}
             price={multimedia.trackPrice ? `$${multimedia.trackPrice}` : ""}
           />

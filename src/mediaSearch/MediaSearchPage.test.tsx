@@ -16,7 +16,7 @@ describe("MediaSearchPage", () => {
     render(<MediaSearchPage />);
     expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
     expect(screen.getByText("Search")).toBeInTheDocument();
-    expect(screen.getByText("Filter")).toBeInTheDocument();
+    expect(screen.getByText("all")).toBeInTheDocument();
   });
 
   it("shows error when searching with empty input", async () => {
@@ -41,6 +41,27 @@ describe("MediaSearchPage", () => {
 
     await waitFor(() => {
       expect(getMultimedia).toHaveBeenCalledWith("jack", MediaType.ALL);
+    });
+
+    expect(await screen.findByText("Jhon Doe")).toBeInTheDocument();
+  });
+
+  it("calls getMultimedia with different media type", async () => {
+    (getMultimedia as jest.Mock).mockResolvedValue([
+      { artistName: "Jhon Doe" },
+    ]);
+
+    render(<MediaSearchPage />);
+    const input = screen.getByPlaceholderText("Search...");
+    const select = screen.getByTestId("dropdown");
+
+    fireEvent.change(input, { target: { value: "jack" } });
+    fireEvent.change(select, { target: { value: "movie" } });
+    fireEvent.click(screen.getByText("Search"));
+
+    await waitFor(() => {
+      expect(getMultimedia).toHaveBeenCalledWith("jack", MediaType.MOVIE);
+      expect(getMultimedia).not.toHaveBeenCalledWith("jack", MediaType.ALL);
     });
 
     expect(await screen.findByText("Jhon Doe")).toBeInTheDocument();
