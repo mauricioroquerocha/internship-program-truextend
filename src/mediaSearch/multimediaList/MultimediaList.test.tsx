@@ -5,7 +5,13 @@ import { sampleMultimediaList } from "../../../__mocks__/multimediaSampleData";
 describe("MultimediaList", () => {
   it("renders multimedia cards when data is present", () => {
     render(
-      <MultimediaList multimediaList={sampleMultimediaList} loading={false} />
+      <MultimediaList
+        multimediaList={sampleMultimediaList}
+        loading={false}
+        page={1}
+        setPage={() => {}}
+        pageCount={1}
+      />
     );
 
     expect(screen.getByText("Song One")).toBeInTheDocument();
@@ -15,7 +21,13 @@ describe("MultimediaList", () => {
 
   it("renders skeletons while loading", () => {
     render(
-      <MultimediaList multimediaList={sampleMultimediaList} loading={true} />
+      <MultimediaList
+        multimediaList={sampleMultimediaList}
+        loading={true}
+        page={1}
+        setPage={() => {}}
+        pageCount={1}
+      />
     );
 
     const skeletons = screen.getAllByTestId("skeleton-card");
@@ -23,13 +35,28 @@ describe("MultimediaList", () => {
   });
 
   it("renders 'No results found' when no data", () => {
-    render(<MultimediaList multimediaList={[]} loading={false} />);
+    render(
+      <MultimediaList
+        multimediaList={[]}
+        loading={false}
+        page={1}
+        setPage={() => {}}
+        pageCount={1}
+      />
+    );
 
     expect(screen.getByText("No results found.")).toBeInTheDocument();
   });
 
   it("renders 'No results found' when multimediaList is undefined", () => {
-    render(<MultimediaList loading={false} />);
+    render(
+      <MultimediaList
+        loading={false}
+        page={1}
+        setPage={() => {}}
+        pageCount={1}
+      />
+    );
 
     expect(screen.getByText("No results found.")).toBeInTheDocument();
   });

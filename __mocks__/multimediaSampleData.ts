@@ -18,3 +18,15 @@ export const sampleMultimediaList: Multimedia[] = [
     collectionName: "Song Two",
   },
 ];
+
+export const sampleMultimediaListPaginnation: Multimedia[] = Array.from(
+  { length: 25 },
+  (_, i) => ({
+    trackId: i + 1,
+    trackName: `Track ${i + 1}`,
+    artistName: `Artist ${i + 1}`,
+    trackPrice: i + 0.99,
+    artworkUrl100: "",
+    collectionName: `Collection ${i + 1}`,
+  })
+);
