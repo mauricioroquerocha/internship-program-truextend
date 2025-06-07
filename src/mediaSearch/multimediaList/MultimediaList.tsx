@@ -59,7 +59,6 @@ const MultimediaList: React.FC<MultimediaListProps> = ({
           disabled={page === pageCount}
           onClick={() => {
             setPage(page + 1);
-            console.log(page + " " + pageCount);
           }}
         >
           Next

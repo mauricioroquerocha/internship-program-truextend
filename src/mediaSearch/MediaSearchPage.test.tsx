@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import MediaSearchPage from "./MediaSearchPage";
 import { getMultimedia } from "../lib/MultimediaApi";
 import { MediaType } from "../types/Multimedia";
+import { sampleMultimediaListPaginnation } from "../../__mocks__/multimediaSampleData";
 
 jest.mock("../lib/MultimediaApi", () => ({
   getMultimedia: jest.fn(),
@@ -21,6 +22,8 @@ describe("MediaSearchPage", () => {
 
   it("shows error when searching with empty input", async () => {
     render(<MediaSearchPage />);
+
+    // Trigger search
     fireEvent.click(screen.getByText("Search"));
 
     expect(
@@ -36,6 +39,7 @@ describe("MediaSearchPage", () => {
     render(<MediaSearchPage />);
     const input = screen.getByPlaceholderText("Search...");
 
+    // Trigger search
     fireEvent.change(input, { target: { value: "jack" } });
     fireEvent.click(screen.getByText("Search"));
 
@@ -55,6 +59,7 @@ describe("MediaSearchPage", () => {
     const input = screen.getByPlaceholderText("Search...");
     const select = screen.getByTestId("dropdown");
 
+    // Trigger search
     fireEvent.change(input, { target: { value: "jack" } });
     fireEvent.change(select, { target: { value: "movie" } });
     fireEvent.click(screen.getByText("Search"));
@@ -65,5 +70,43 @@ describe("MediaSearchPage", () => {
     });
 
     expect(await screen.findByText("Jhon Doe")).toBeInTheDocument();
+  });
+
+  it("should paginate results when clicking next and previous", async () => {
+    (getMultimedia as jest.Mock).mockResolvedValue(
+      sampleMultimediaListPaginnation
+    );
+
+    render(<MediaSearchPage />);
+
+    const input = screen.getByPlaceholderText("Search...");
+    fireEvent.change(input, { target: { value: "test" } });
+
+    // Trigger search
+    const searchButton = screen.getByText("Search");
+    fireEvent.click(searchButton);
+
+    // Wait for first page
+    await waitFor(() => {
+      expect(screen.getByText("Track 1")).toBeInTheDocument();
+      expect(screen.getByText("Track 10")).toBeInTheDocument();
+    });
+
+    // Click "Next" button
+    const nextButton = screen.getByText("Next");
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.getByText("Track 11")).toBeInTheDocument();
+      expect(screen.getByText("Track 20")).toBeInTheDocument();
+    });
+
+    // Click "Previous" button
+    const prevButton = screen.getByText("Previous");
+    fireEvent.click(prevButton);
+
+    await waitFor(() => {
+      expect(screen.getByText("Track 1")).toBeInTheDocument();
+    });
   });
 });
