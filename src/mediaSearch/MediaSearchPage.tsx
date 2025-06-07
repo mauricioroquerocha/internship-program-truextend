@@ -8,10 +8,20 @@ import Dropdown from "../components/dropdown/Dropdown";
 
 export default function MediaSearchPage() {
   const [query, setQuery] = useState("");
-  const [multimediaList, setMultimediaList] = useState<Multimedia[]>();
+  const [allMultimediaList, setAllMultimediaList] = useState<Multimedia[]>();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [mediaType, setMediaType] = useState<string>(MediaType.ALL);
+  const [page, setPage] = useState(1);
+
+  const pageSize = 10;
+  const pageCount = Math.ceil((allMultimediaList?.length ?? 0) / pageSize);
+
+  // Client-side pagination
+  const paginatedMultimediaList = allMultimediaList?.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
 
   const validate = (value: string): boolean => {
     if (!value.trim()) {
@@ -23,19 +33,23 @@ export default function MediaSearchPage() {
     return true;
   };
 
-  const onSearch = async (mediaType: string) => {
+  const onSearch = async (mediaType: string, pageNumber = 1) => {
     if (validate(query)) {
       setLoading(true);
-      setMultimediaList(await getMultimedia(query, mediaType));
+      console.log(loading);
+
+      setAllMultimediaList(await getMultimedia(query, mediaType));
+      setPage(pageNumber);
+
       setLoading(false);
     } else {
-      setMultimediaList([]);
+      setAllMultimediaList([]);
     }
   };
 
   const onMediaTypeSelected = (mediaType: string) => {
     setMediaType(mediaType);
-    onSearch(mediaType);
+    onSearch(mediaType, 1);
   };
 
   return (
@@ -62,7 +76,7 @@ export default function MediaSearchPage() {
           onChange={setQuery}
           placeholder="Search..."
           onEnter={() => {
-            onSearch(mediaType);
+            onSearch(mediaType, 1);
           }}
           error={error}
         ></SearchBar>
@@ -73,15 +87,20 @@ export default function MediaSearchPage() {
         ></Dropdown>
         <Button
           onClick={() => {
-            onSearch(mediaType);
+            onSearch(mediaType, 1);
           }}
         >
           Search
         </Button>
       </div>
       <MultimediaList
-        multimediaList={multimediaList}
+        multimediaList={paginatedMultimediaList}
         loading={loading}
+        page={page}
+        setPage={(page: number) => {
+          setPage(page);
+        }}
+        pageCount={pageCount}
       ></MultimediaList>
     </div>
   );
